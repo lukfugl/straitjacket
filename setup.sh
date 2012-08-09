@@ -18,7 +18,6 @@ mv $checkout /var/webapps/straitjacket
 cd /var/webapps/straitjacket/src && make
 
 # put configurations in place
-cd /var/webapps/straitjacket && git checkout mebipenny
 mv /var/webapp/straitjacket/src/getpwuid_r_hijack.so \
    /var/local/straitjacket/lib
 cp -r /var/webapp/straitjacket/files/etc/apparmor.d/* /etc/apparmor.d/
