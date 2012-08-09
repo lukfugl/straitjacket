@@ -21,4 +21,4 @@ import os, sys
 sys.path.append(os.path.realpath(os.path.dirname(__file__)))
 from server import webapp
 
-application = webapp(skip_language_checks=True).wsgifunc()
+application = webapp(skip_language_checks=False).wsgifunc()
