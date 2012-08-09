@@ -1,12 +1,10 @@
 # tested on a VirtualBox i386 Ubuntu Precise VM. run as root
-checkout=$0 # pathname portion only
+cd .. # out of straitjacket checkout
 
 # install dependencies
 aptitude install apache2-mpm-itk gcc mono-gmcs g++ guile-1.8 ghc lua5.1 ocaml \
                  php5 python ruby ruby1.9 scala racket golang openjdk-6-jdk \
-                 python-pip
-add-apt-repository ppa:chris-lea/node.js
-aptitude update && aptitude install nodejs npm
+                 python-pip gcc-multilib xdg-utils nodejs npm
 wget http://ftp.digitalmars.com/dmd_2.060-0_i386.deb
 dpkg -i dmd_2.060-0_i386.deb
 rm dmd_2.060-0_i386.deb
@@ -14,7 +12,7 @@ rm dmd_2.060-0_i386.deb
 # setup and relocate
 adduser straitjacket
 mkdir -p /var/webapps /var/local/straitjacket/{lib,tmp}
-mv $checkout /var/webapps/straitjacket
+mv straitjacket /var/webapps/straitjacket
 cd /var/webapps/straitjacket/src && make
 
 # put configurations in place
