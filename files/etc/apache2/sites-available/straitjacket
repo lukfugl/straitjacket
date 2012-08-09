@@ -1,5 +1,8 @@
 <VirtualHost *:80>
 	ServerAdmin jt@instructure.com
+	<IfModule mpm_itk_module>
+		AssignUserId straitjacket straitjacket
+	</IfModule>
 
 	DocumentRoot /var/webapps/straitjacket/static
 	Alias /static/ /var/webapps/straitjacket/static/
