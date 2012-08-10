@@ -1,36 +1,35 @@
 #!/bin/sh
 
+WEBROOT=/var/webapps/straitjacket
+LOCALROOT=/var/local/straitjacket
+
 # relocate under straitjacket user
 sudo adduser straitjacket
-sudo mkdir -p /var/webapps /var/local/straitjacket
-sudo mv ../straitjacket /var/webapps/straitjacket
-sudo chown -R straitjacket:straitjacket /var/webapps/straitjacket \
-                                        /var/local/straitjacket
-cd /var/webapps/straitjacket
+sudo mkdir -p /var/webapps $LOCALROOT
+sudo mv ../straitjacket $WEBROOT
+sudo chown -R straitjacket:straitjacket $WEBROOT $LOCALROOT
 
 # setup
-sudo -u straitjacket python install.py
-sudo -u straitjacket mkdir -p /var/local/straitjacket/lib static
-cd src && sudo -u straitjacket make
+cd $WEBROOT && sudo -u straitjacket python install.py
+sudo -u straitjacket mkdir -p $LOCALROOT/lib $WEBROOT/static
+cd $WEBROOT/src && sudo -u straitjacket make
 
 # put C# getpwuid hack in place
-sudo -u straitjacket mv src/getpwuid_r_hijack.so /var/local/straitjacket/lib/
+sudo -u straitjacket mv $WEBROOT/src/getpwuid_r_hijack.so $LOCALROOT/lib/
 
 # configure apparmor
-sudo cp -r files/etc/apparmor.d/* /etc/apparmor.d/
+sudo cp -r $WEBROOT/files/etc/apparmor.d/* /etc/apparmor.d/
 sudo /etc/init.d/apparmor reload
 
 # configure apache
-sudo cp files/etc/apache2/sites-available/straitjacket \
-        /etc/apache2/sites-available/straitjacket
+sudo cp $WEBROOT/files/etc/apache2/sites-available/straitjacket /etc/apache2/sites-available/straitjacket
 sudo ln -s /etc/apache2/sites-available/straitjacket /etc/apache2/sites-enabled
 sudo rm /etc/apache2/sites-enabled/000-default
 sudo /etc/init.d/apache2 restart
 
 # test the setup
-sudo -u straitjacket git checkout testing
-sudo -u straitjacket python server_tests.py
-sudo -u straitjacket python remote_server_tests.py http://localhost/
+cd $WEBROOT && sudo -u straitjacket python server_tests.py
+cd $WEBROOT && sudo -u straitjacket python remote_server_tests.py http://localhost/
 
 # done
-sudo -u straitjacket git checkout master
+cd $WEBROOT && sudo -u straitjacket git checkout master
