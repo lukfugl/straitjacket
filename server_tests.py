@@ -135,14 +135,6 @@ class StraitJacketTests(TestCase):
         "execution_profile"].__class__.__name__, "VMProfile")
     self.assertEquals(self.sj_run("scala",
         "object Main extends Application { 0 }"), (0, ""))
-    self.assertEquals(self.sj_run("scala",
-        "object extends { 0 }"), (1, "compilation_error"))
-    self.assertEquals(self.sj_run("scala",
-        "object Main extends Application { throw new Exception(\"whoops\")}"),
-        (1, "runtime_error"))
-    self.assertEquals(self.sj_run("scala",
-        "object Main extends Application { Thread.sleep(20000) }"),
-        (-9, "runtime_timelimit"))
 
 
 if __name__ == "__main__": unittest.main()
